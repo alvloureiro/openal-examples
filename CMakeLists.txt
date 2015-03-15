@@ -7,9 +7,3 @@ include(MacroOutOfSourceBuild)
 macro_ensure_out_of_source_build("${PROJECT_NAME} requires an out of source build.")
 
 add_subdirectory(openal-example-1)
-
-FILE(COPY ${CMAKE_CURRENT_SOURCE_DIR}/data/wav/about_time.wav
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/data/wav)
-
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/wav/about_time.wav
-    DESTINATION data/wav)

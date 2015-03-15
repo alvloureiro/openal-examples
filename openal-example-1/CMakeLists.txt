@@ -15,3 +15,9 @@ if(ALUT_FOUND)
     include_directories(${ALUT_INCLUDE_DIR})
     target_link_libraries(example-1 ${ALUT_LIBRARIES})
 endif(ALUT_FOUND)
+
+FILE(COPY ${CMAKE_CURRENT_SOURCE_DIR}/sample1.wav
+    DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/openal-example-1/sample1.wav
+    DESTINATION openal-example-1)
