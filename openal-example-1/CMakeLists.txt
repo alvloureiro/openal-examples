@@ -22,5 +22,8 @@ FILE(COPY ${CMAKE_CURRENT_SOURCE_DIR}/sample1.wav
 FILE(COPY ${CMAKE_SOURCE_DIR}/data/wav/about_time.wav
     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
+FILE(COPY ${CMAKE_SOURCE_DIR}/data/wav/voice-example.wav
+    DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/openal-example-1/sample1.wav
     DESTINATION openal-example-1)

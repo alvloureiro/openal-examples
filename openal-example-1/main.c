@@ -6,6 +6,7 @@
 #include <string.h>
 
 static const char *audio_file = "sample1.wav";
+static const char *voice_audio_file = "voice-example.wav";
 static const int capture_audio_freq = 44100;
 static const int capture_audio_size = 1024;
 
@@ -137,7 +138,8 @@ int main (int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    buffer = alutCreateBufferFromFile(audio_file);
+    /*buffer = alutCreateBufferFromFile(audio_file);*/
+    buffer = alutCreateBufferFromFile(voice_audio_file);
     if (check_alut_error() || buffer == AL_NONE) {
         close_audio_library();
         alutExit();
