@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-const char *audio_file = "sample1.wav";
+static const char *audio_file = "sample1.wav";
 static const int capture_audio_freq = 44100;
 static const int capture_audio_size = 1024;
 
@@ -132,13 +132,13 @@ int main (int argc, char** argv)
 
     alutInit(&argc, argv);
     if (check_alut_error()) {
+        close_audio_library();
+        alutExit();
         return EXIT_FAILURE;
     }
 
     buffer = alutCreateBufferFromFile(audio_file);
-    if (check_alut_error()) {
-        return EXIT_FAILURE;
-    } else if (buffer == AL_NONE) {
+    if (check_alut_error() || buffer == AL_NONE) {
         close_audio_library();
         alutExit();
         return EXIT_FAILURE;
