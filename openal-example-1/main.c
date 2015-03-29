@@ -17,6 +17,12 @@ ALCcontext *g_context = NULL;
 ALCenum g_error = AL_NO_ERROR;
 const ALchar *g_string_error = NULL;
 
+typedef enum {
+    HIGH_PITCH = 0,
+    LOW_PITCH,
+    NORMAL_PITCH
+} PITCH_EFFECT;
+
 static ALboolean check_al_error()
 {
     g_error = alGetError();
@@ -124,10 +130,45 @@ static void stop_record_audio ()
     return;
 }
 
+static void play_audio (ALuint source)
+{
+    ALuint source_state;
+    alSourcePlay(source);
+    alGetSourcei(source, AL_SOURCE_STATE, &source_state);
+    while (source_state == AL_PLAYING) {
+        alGetSourcei(source, AL_SOURCE_STATE, &source_state);
+    }
+}
+
+static void do_pitch_effect (PITCH_EFFECT effect, ALuint source)
+{
+    switch (effect) {
+        case NORMAL_PITCH:
+            alSourcef(source, AL_PITCH, 1.0);
+        break;
+        case LOW_PITCH:
+            alSourcef(source, AL_PITCH, 0.6);
+        break;
+        case HIGH_PITCH:
+            alSourcef(source, AL_PITCH, 2.0);
+        break;
+        default:
+        break;
+    }
+    play_audio(source);
+}
+
+static void setup_listener ()
+{
+    alListener3f(AL_POSITION, 0, 0, 0);
+    alListener3f(AL_VELOCITY, 0, 0, 0);
+    alListener3f(AL_ORIENTATION, 0, 0, -1);
+}
+
 int main (int argc, char** argv)
 {
     ALuint buffer;
-    ALuint source, source_state;
+    ALuint source;
 
     initialize_audio_library();
 
@@ -146,26 +187,19 @@ int main (int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    alListener3f(AL_POSITION, 0, 0, 0);
-    alListener3f(AL_VELOCITY, 0, 0, 0);
-    alListener3f(AL_ORIENTATION, 0, 0, -1);
+    setup_listener();
 
     ALfloat position[3] = {1.0, 1.0, 1.0};
     ALfloat velocity[3] = {1.0, 1.0, 1.0};
     alGenSources(1, &source);
-    alSourcef(source, AL_PITCH, 1.0);
     alSourcef(source, AL_GAIN, 1.0);
     alSourcefv(source, AL_POSITION, position);
     alSourcefv(source, AL_VELOCITY, velocity);
     alSourcei(source, AL_LOOPING, AL_FALSE);
 
     alSourcei(source, AL_BUFFER, buffer);
-    alSourcePlay(source);
-    alGetSourcei(source, AL_SOURCE_STATE, &source_state);
-    while (source_state == AL_PLAYING) {
-        alGetSourcei(source, AL_SOURCE_STATE, &source_state);
-    }
-
+    do_pitch_effect(NORMAL_PITCH, source);
+    play_audio(source);
     close_audio_library();
     alutExit();
     return EXIT_SUCCESS;
