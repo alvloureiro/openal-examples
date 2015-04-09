@@ -5,10 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-static const char *audio_file = "sample1.wav";
-static const char *voice_audio_file = "voice-example.wav";
-static const int capture_audio_freq = 44100;
-static const int capture_audio_size = 1024;
+static const char *audio_file = "../data/wav/sample1.wav";
+static const char *voice_audio_file = "../../data/wav/voice-example.wav";
 
 ALbyte buffer[22050];
 ALint sample;
@@ -16,12 +14,6 @@ ALCdevice *g_device = NULL;
 ALCcontext *g_context = NULL;
 ALCenum g_error = AL_NO_ERROR;
 const ALchar *g_string_error = NULL;
-
-typedef enum {
-    HIGH_PITCH = 0,
-    LOW_PITCH,
-    NORMAL_PITCH
-} PITCH_EFFECT;
 
 static ALboolean check_al_error()
 {
@@ -101,35 +93,6 @@ static void print_available_devices ()
     }
 }
 
-static void start_record_audio ()
-{
-    print_available_devices();
-    ALCdevice *capture_device = alcCaptureOpenDevice(NULL, capture_audio_freq, AL_FORMAT_STEREO16, capture_audio_size);
-    ALboolean got_error = check_al_error();
-    if (got_error) {
-        printf("Error when try to open a capture device\n");
-        alcCaptureCloseDevice(capture_device);
-        return;
-    }
-    alcCaptureStart(capture_device);
-    int capturing = 1;
-    while (capturing) {
-        alcGetIntegerv(capture_device, ALC_CAPTURE_SAMPLES, (ALsizei) sizeof(ALint), &sample);
-    }
-    do {
-        printf("sample size: %d\n", sample);
-    } while (sample < 40960);//22050); // 4096 = 1024 * 4 comes from AL_FORMAT_STEREO16
-
-    alcCaptureSamples(capture_device, (ALCvoid *)buffer, sample);
-    alcCaptureStop(capture_device);
-    alcCaptureCloseDevice(capture_device);
-}
-
-static void stop_record_audio ()
-{
-    return;
-}
-
 static void play_audio (ALuint source)
 {
     ALuint source_state;
@@ -138,24 +101,6 @@ static void play_audio (ALuint source)
     while (source_state == AL_PLAYING) {
         alGetSourcei(source, AL_SOURCE_STATE, &source_state);
     }
-}
-
-static void do_pitch_effect (PITCH_EFFECT effect, ALuint source)
-{
-    switch (effect) {
-        case NORMAL_PITCH:
-            alSourcef(source, AL_PITCH, 1.0);
-        break;
-        case LOW_PITCH:
-            alSourcef(source, AL_PITCH, 0.6);
-        break;
-        case HIGH_PITCH:
-            alSourcef(source, AL_PITCH, 2.0);
-        break;
-        default:
-        break;
-    }
-    play_audio(source);
 }
 
 static void setup_listener ()
@@ -198,7 +143,6 @@ int main (int argc, char** argv)
     alSourcei(source, AL_LOOPING, AL_FALSE);
 
     alSourcei(source, AL_BUFFER, buffer);
-    do_pitch_effect(NORMAL_PITCH, source);
     play_audio(source);
     close_audio_library();
     alutExit();
