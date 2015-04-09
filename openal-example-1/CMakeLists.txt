@@ -4,14 +4,10 @@ set(openAL-Examples_SOURCES main.c)
 
 add_executable(example-1 main.c)
 
-find_package(OpenAL REQUIRED)
 if(OpenAL_FOUND)
-    include_directories(${OpenAL_INCLUDE_DIR})
     target_link_libraries(example-1 ${OpenAL_LIBRARIES})
 endif(OpenAL_FOUND)
-
-find_package(ALUT REQUIRED)
 if(ALUT_FOUND)
-    include_directories(${ALUT_INCLUDE_DIR})
     target_link_libraries(example-1 ${ALUT_LIBRARIES})
 endif(ALUT_FOUND)
+
