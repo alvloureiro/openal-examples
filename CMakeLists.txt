@@ -7,3 +7,6 @@ include(MacroOutOfSourceBuild)
 macro_ensure_out_of_source_build("${PROJECT_NAME} requires an out of source build.")
 
 add_subdirectory(openal-example-1)
+
+FILE(COPY ${CMAKE_SOURCE_DIR}/data
+    DESTINATION ${CMAKE_BINARY_DIR})
