@@ -19,6 +19,7 @@ endif(ALUT_FOUND)
 add_subdirectory(openal-example-1)
 add_subdirectory(pitch-shift)
 add_subdirectory(filters)
+add_subdirectory(effects)
 
 FILE(COPY ${CMAKE_SOURCE_DIR}/data
     DESTINATION ${CMAKE_BINARY_DIR})
