@@ -128,9 +128,7 @@ int main(int argc, char *argv[])
         } else {
             // setting the decai time if there is no error
             printf("setting the decay time to 5.0f\n");
-            alEffectf(effects[0], AL_REVERB_DECAY_TIME, 10.0f);
-            alEffectf(effects[0], AL_REVERB_DECAY_TIME, 10.0f);
-            alEffectf(effects[0], AL_REVERB_DECAY_TIME, 10.0f);
+            alEffectf(effects[0], AL_REVERB_DECAY_TIME, 5.0f);
         }
     }
     // setting the second effect to flanger type
@@ -189,9 +187,9 @@ int main(int argc, char *argv[])
     // creating the source
     alGetError();
     printf("Generating the AL Source\n");
-    ALfloat position[3] = {2.0, 2.0, 1.0};
-    ALfloat velocity[3] = {3.0, 3.0, 3.0};
-    ALfloat direction[3] = {1.0, 2.0, -1.0};
+    ALfloat position[3] = {2.0, 2.0, 2.0};
+    ALfloat velocity[3] = {2.0, 2.0, 2.0};
+    ALfloat direction[3] = {2.0, 2.0, 2.0};
 
     alGenSources(1, &source);
     alSourcef(source, AL_GAIN, 1.0);
